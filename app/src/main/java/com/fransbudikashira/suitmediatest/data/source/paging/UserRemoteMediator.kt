@@ -1,6 +1,5 @@
 package com.fransbudikashira.suitmediatest.data.source.paging
 
-import android.util.Log
 import androidx.paging.ExperimentalPagingApi
 import androidx.paging.LoadType
 import androidx.paging.PagingState
@@ -13,7 +12,7 @@ import com.fransbudikashira.suitmediatest.data.source.network.ApiService
 import com.fransbudikashira.suitmediatest.util.Constants.ITEMS_PER_PAGE
 import com.fransbudikashira.suitmediatest.util.DataMapper
 
-@OptIn(ExperimentalPagingApi::class)
+@ExperimentalPagingApi
 class UserRemoteMediator (
     private val apiService: ApiService,
     private val userDatabase: UserDatabase
@@ -27,16 +26,12 @@ class UserRemoteMediator (
         state: PagingState<Int, UserEntity>
     ): MediatorResult {
         return try {
-            Log.d("HALO", "load: ${loadType}")
             val currentPage = when(loadType) {
                 LoadType.REFRESH -> {
-                    Log.d("HALO", "Refresh")
                     val remoteKeys = getRemoteKeyClosestToCurrentPosition(state)
-                    Log.d("HALO", "remoteKeys: ${remoteKeys}")
                     remoteKeys?.nextPage?.minus(1) ?: 1
                 }
                 LoadType.PREPEND -> {
-                    Log.d("HALO", "PREPEND")
                     val remoteKeys = getRemoteKeyForFirstItem(state)
                     val prevPage = remoteKeys?.prevPage
                         ?: return MediatorResult.Success(
@@ -45,7 +40,6 @@ class UserRemoteMediator (
                     prevPage
                 }
                 LoadType.APPEND -> {
-                    Log.d("HALO", "APPEND")
                     val remoteKeys = getRemoteKeyForLastItem(state)
                     val nextPage = remoteKeys?.nextPage
                         ?: return MediatorResult.Success(
@@ -54,14 +48,11 @@ class UserRemoteMediator (
                     nextPage
                 }
             }
-
             val response = apiService.getUsers(page = currentPage, perPage = ITEMS_PER_PAGE)
-            Log.d("HALO", "load: ${response}")
             val endOfPaginationReached = response.data.isEmpty()
 
             val prevPage = if (currentPage == 1) null else currentPage - 1
             val nextPage = if (endOfPaginationReached) null else currentPage + 1
-            Log.d("HALO", "nextPage: ${nextPage} prevPage: ${prevPage}")
 
             userDatabase.withTransaction {
                 if (loadType == LoadType.REFRESH) {

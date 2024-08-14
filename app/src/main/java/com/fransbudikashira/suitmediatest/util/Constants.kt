@@ -6,5 +6,5 @@ object Constants {
     const val USER_TABLE = "user_table"
     const val USER_REMOTE_KEYS_TABLE = "user_remote_keys_table"
 
-    const val ITEMS_PER_PAGE = 5
+    const val ITEMS_PER_PAGE = 10
 }

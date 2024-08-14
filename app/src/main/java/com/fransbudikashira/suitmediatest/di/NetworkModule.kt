@@ -1,5 +1,6 @@
 package com.fransbudikashira.suitmediatest.di
 
+import android.util.Log
 import com.fransbudikashira.suitmediatest.BuildConfig
 import com.fransbudikashira.suitmediatest.data.source.network.ApiService
 import dagger.Module
@@ -29,11 +30,10 @@ object NetworkModule {
     @Singleton
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit {
         val baseUrl = BuildConfig.BASE_URL
-
         return Retrofit.Builder()
             .baseUrl(baseUrl)
-            .client(okHttpClient)
             .addConverterFactory(GsonConverterFactory.create())
+            .client(okHttpClient)
             .build()
     }
 

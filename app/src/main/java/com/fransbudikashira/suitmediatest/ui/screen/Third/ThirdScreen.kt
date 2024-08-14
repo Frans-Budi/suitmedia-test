@@ -1,8 +1,8 @@
 package com.fransbudikashira.suitmediatest.ui.screen.Third
 
-import android.util.Log
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -21,13 +21,14 @@ import com.fransbudikashira.suitmediatest.ui.theme.SuitmediaTestTheme
 @Composable
 fun ThirdScreen(
     modifier: Modifier = Modifier,
+    onClick: (UserEntity) -> Unit,
     viewModel: ThirdViewModel = hiltViewModel()
 ) {
     val getUsers = viewModel.getUsers.collectAsLazyPagingItems()
 
     ThirdContent(
         users = getUsers,
-        onClick = {},
+        onClick = onClick,
         modifier = modifier
     )
 }
@@ -39,29 +40,9 @@ fun ThirdContent(
     onClick: (UserEntity) -> Unit,
     modifier: Modifier
 ) {
-    Log.d("Error", users.loadState.toString())
-
     LazyColumn(
         modifier.fillMaxSize()
     ) {
-//        items(
-//            count = users.itemCount,
-//            key = {
-//                users.itemKey { it }
-//            },
-//            itemContent = {
-//                val data = users[it]!!
-//                UserItem(
-//                    imageUrl = data.imageUrl,
-//                    email = data.email,
-//                    firstName = data.first_name,
-//                    lastName = data.last_name,
-//                    modifier = Modifier.clickable {
-//                        onClick(data)
-//                    },
-//                )
-//            }
-//        )
         items(users.itemCount) {
             val data = users[it]!!
             UserItem(
@@ -69,9 +50,9 @@ fun ThirdContent(
                 email = data.email,
                 firstName = data.first_name,
                 lastName = data.last_name,
-                modifier = Modifier.clickable {
-                    onClick(data)
-                },
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .clickable { onClick(data) },
             )
         }
     }
@@ -81,10 +62,6 @@ fun ThirdContent(
 @Composable
 fun ThirdScreenPreview() {
     SuitmediaTestTheme {
-//        ThirdContent(
-//            users = listOf(),
-//            onClick = {},
-//            modifier = Modifier
-//        )
+//        ThirdContent(users = , onClick = , modifier = )
     }
 }

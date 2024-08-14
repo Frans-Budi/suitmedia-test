@@ -1,5 +1,6 @@
 package com.fransbudikashira.suitmediatest
 
+import android.util.Log
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
@@ -52,7 +53,7 @@ fun SuitMediaApp(
                 }
             }
         },
-        modifier = Modifier
+        modifier = modifier
     ) { innerPadding ->
         NavHost(
             navController = navController,
@@ -71,16 +72,24 @@ fun SuitMediaApp(
                 arguments = listOf(navArgument("name") { type = NavType.StringType })
             ) {
                 val name = it.arguments?.getString("name") ?: ""
+                val selectedUser = it.savedStateHandle.get<String>("selectedUser")
                 SecondScreen(
                     name = name,
                     onChooseUserClick = {
                         navController.navigate(Screen.Third.route)
-                    }
+                    },
+                    selectedUser = selectedUser ?: stringResource(R.string.selected_user_name)
                 )
             }
             composable(Screen.Third.route) {
                 ThirdScreen(
-                    modifier = Modifier
+                    modifier = Modifier,
+                    onClick = { user ->
+                        navController.previousBackStackEntry
+                            ?.savedStateHandle
+                            ?.set("selectedUser", "${user.first_name} ${user.last_name}")
+                        navController.popBackStack()
+                    }
                 )
             }
         }

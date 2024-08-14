@@ -24,11 +24,12 @@ import com.fransbudikashira.suitmediatest.ui.theme.SuitmediaTestTheme
 fun SecondScreen(
     name: String,
     onChooseUserClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    selectedUser: String,
 ) {
     SecondContent(
         name = name,
-        selectedUser = stringResource(R.string.selected_user_name),
+        selectedUser = selectedUser,
         onChooseUserClick = onChooseUserClick,
         modifier = modifier
     )
@@ -52,7 +53,7 @@ fun SecondContent(
                 .fillMaxSize()
                 .padding(24.dp)
         ) {
-            Column() {
+            Column {
                 Text(
                     text = "Welcome",
                     style = MaterialTheme.typography.bodyLarge
@@ -87,7 +88,8 @@ fun SecondScreenPreview() {
     SuitmediaTestTheme {
         SecondScreen(
             name = "Frans",
-            onChooseUserClick = {}
+            onChooseUserClick = {},
+            selectedUser = stringResource(R.string.selected_user_name)
         )
     }
 }
